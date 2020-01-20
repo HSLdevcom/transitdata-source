@@ -16,27 +16,11 @@ import org.springframework.data.redis.core.RedisTemplate;
 
 @Configuration
 public class RedisConnection {
-    @Value("${redis.cache.hostname}")
+    @Value("${redis.hostname}")
     private String redisHost;
 
-    @Value("${redis.cache.port}")
+    @Value("${redis.port}")
     private Integer redisPort;
-
-    @Value("${redis.cache.thread.maxActive}")
-    private Integer MAXACTIVE;
-
-    @Value("${redis.cache.thread.maxIdle}")
-    private Integer MAXIDLE;
-
-    @Value("${taskScheduler.defaultLockMaxDurationMinutes}")
-    private int lockMaxDuration;
-
-    @Value("${app.environment}")
-    private String ENV;
-
-    @Value("${taskScheduler.poolSize}")
-    private int tasksPoolSize;
-
 
     @Bean
     public RedisConnectionFactory connectionFactory(RedisStandaloneConfiguration redisStandaloneConfiguration,
