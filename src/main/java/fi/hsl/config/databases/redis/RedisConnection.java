@@ -1,4 +1,4 @@
-package fi.hsl.config.redis;
+package fi.hsl.config.databases.redis;
 
 import io.lettuce.core.ClientOptions;
 import io.lettuce.core.resource.ClientResources;

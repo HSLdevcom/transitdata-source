@@ -1,7 +1,7 @@
 package fi.hsl.pubtrans;
 
 import fi.hsl.common.transitdata.TransitdataProperties;
-import fi.hsl.config.redis.RedisService;
+import fi.hsl.config.databases.redis.RedisService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

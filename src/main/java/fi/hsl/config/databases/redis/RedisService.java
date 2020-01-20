@@ -1,4 +1,4 @@
-package fi.hsl.config.redis;
+package fi.hsl.config.databases.redis;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +10,8 @@ import java.util.Map;
 
 @Service
 @Slf4j
-public class RedisService {
+public
+class RedisService {
     @Autowired
     private RedisTemplate<Object, Object> redisTemplate;
 

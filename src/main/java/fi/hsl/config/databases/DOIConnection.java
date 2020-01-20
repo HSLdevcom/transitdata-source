@@ -9,6 +9,7 @@ import javax.annotation.PostConstruct;
 public class DOIConnection {
     @PostConstruct
     public void init() {
+        //TODO
         throw new NotImplementedException("Implement DOI Connection");
     }
 }
