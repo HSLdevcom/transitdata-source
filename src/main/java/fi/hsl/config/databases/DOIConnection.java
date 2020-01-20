@@ -1,4 +1,4 @@
-package fi.hsl.config;
+package fi.hsl.config.databases;
 
 import org.apache.pulsar.shade.org.apache.commons.lang.NotImplementedException;
 import org.springframework.context.annotation.Configuration;
