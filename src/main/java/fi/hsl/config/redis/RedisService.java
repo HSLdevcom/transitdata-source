@@ -1,7 +1,7 @@
 package fi.hsl.config.redis;
 
+import org.apache.pulsar.shade.org.apache.commons.lang.NotImplementedException;
 import org.springframework.stereotype.Service;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.Map;
 

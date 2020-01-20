@@ -4,7 +4,6 @@ import fi.hsl.common.pulsar.PulsarApplicationContext;
 import fi.hsl.common.transitdata.TransitdataProperties;
 import fi.hsl.common.transitdata.TransitdataSchema;
 import fi.hsl.common.transitdata.proto.PubtransTableProtos;
-import fi.hsl.config.redis.RedisService;
 import org.apache.pulsar.client.api.Producer;
 import org.apache.pulsar.client.api.TypedMessageBuilder;
 import org.slf4j.Logger;
@@ -28,7 +27,7 @@ public abstract class PubtransTableHandler {
     private Producer<byte[]> producer;
     private long lastModifiedTimeStamp;
     @Autowired
-    private RedisService redisService;
+    private PubTransCache pubTransCache;
 
     PubtransTableHandler(PulsarApplicationContext context, TransitdataProperties.ProtobufSchema handlerSchema) {
         lastModifiedTimeStamp = (System.currentTimeMillis() - 5000);
@@ -142,13 +141,11 @@ public abstract class PubtransTableHandler {
     }
 
     private Optional<String> getStopId(long jppId) {
-        String stopIdKey = TransitdataProperties.REDIS_PREFIX_JPP + jppId;
-        return Optional.ofNullable(redisService.get(stopIdKey));
+        return Optional.ofNullable(pubTransCache.getStopId(jppId));
     }
 
     private Optional<Map<String, String>> getTripInfoFields(long dvjId) {
-        String tripInfoKey = TransitdataProperties.REDIS_PREFIX_DVJ + dvjId;
-        return Optional.ofNullable(redisService.hgetAll(tripInfoKey));
+        return Optional.of(pubTransCache.getTripInfoFields(dvjId));
     }
 
     private Optional<PubtransTableProtos.DOITripInfo> getTripInfo(long dvjId, long jppId) {

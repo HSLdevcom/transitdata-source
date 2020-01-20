@@ -1,27 +1,17 @@
 package fi.hsl;
 
-import com.microsoft.sqlserver.jdbc.SQLServerException;
-import com.typesafe.config.Config;
-import fi.hsl.common.config.ConfigParser;
 import fi.hsl.common.config.ConfigUtils;
 import fi.hsl.common.pulsar.PulsarApplication;
-import fi.hsl.common.pulsar.PulsarApplicationContext;
-import fi.hsl.pubtrans.PubtransConnector;
-import fi.hsl.pubtrans.PubtransTableType;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.pulsar.client.api.PulsarClientException;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import redis.clients.jedis.exceptions.JedisException;
 
 import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Scanner;
-import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 @SpringBootApplication
 @Slf4j
@@ -31,7 +21,7 @@ public class TransitdataSourceApplication {
     public static void main(String[] args) {
         log.info("Starting transitdata sources");
         SpringApplication.run(TransitdataSourceApplication.class, args);
-        try {
+/*        try {
             String table = ConfigUtils.getEnvOrThrow("PT_TABLE");
             PubtransTableType type = PubtransTableType.fromString(table);
 
@@ -83,7 +73,7 @@ public class TransitdataSourceApplication {
             }, 0, 1, TimeUnit.SECONDS);
         } catch (Exception e) {
             log.error("Exception at Main", e);
-        }
+        }*/
     }
 
     private static void closeApplication(PulsarApplication app, ScheduledExecutorService scheduler) {

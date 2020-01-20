@@ -1,4 +1,4 @@
-package fi.hsl.config;
+package fi.hsl.config.redis;
 
 import org.apache.pulsar.shade.org.apache.commons.lang.NotImplementedException;
 import org.springframework.context.annotation.Configuration;
@@ -6,10 +6,9 @@ import org.springframework.context.annotation.Configuration;
 import javax.annotation.PostConstruct;
 
 @Configuration
-public class PulsarConnection {
+public class RedisConnection {
     @PostConstruct
     public void init() {
-        //TODO
-        throw new NotImplementedException("Implement Pulsar Connection");
+        throw new NotImplementedException();
     }
 }
