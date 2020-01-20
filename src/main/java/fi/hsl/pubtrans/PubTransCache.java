@@ -14,7 +14,7 @@ class PubTransCache {
 
     String getStopId(long jppId) {
         String stopIdKey = TransitdataProperties.REDIS_PREFIX_JPP + jppId;
-        return redisService.get(stopIdKey);
+        return (String) redisService.get(stopIdKey);
     }
 
     Map<String, String> getTripInfoFields(long dvjId) {

@@ -36,39 +36,6 @@ public abstract class PubtransTableHandler {
         schema = handlerSchema;
     }
 
-    private static Optional<Long> toUtcEpochMs(String localTimestamp, String zoneId) {
-        if (localTimestamp == null || localTimestamp.isEmpty())
-            return Optional.empty();
-
-        try {
-            LocalDateTime dt = LocalDateTime.parse(localTimestamp.replace(" ", "T")); // Make java.sql.Timestamp ISO compatible
-            ZoneId zone = ZoneId.of(zoneId);
-            long epochMs = dt.atZone(zone).toInstant().toEpochMilli();
-            return Optional.of(epochMs);
-        } catch (Exception e) {
-            log.error("Failed to parse datetime from " + localTimestamp, e);
-            return Optional.empty();
-        }
-    }
-
-    long getLastModifiedTimeStamp() {
-        return this.lastModifiedTimeStamp;
-    }
-
-    private void setLastModifiedTimeStamp(long ts) {
-        this.lastModifiedTimeStamp = ts;
-    }
-
-    private Optional<Long> toUtcEpochMs(String localTimestamp) {
-        return toUtcEpochMs(localTimestamp, timeZone);
-    }
-
-    abstract protected byte[] createPayload(ResultSet resultSet, PubtransTableProtos.Common common, PubtransTableProtos.DOITripInfo tripInfo) throws SQLException;
-
-    abstract protected String getTimetabledDateTimeColumnName();
-
-    abstract protected TransitdataSchema getSchema();
-
     Queue<TypedMessageBuilder<byte[]>> handleResultSet(ResultSet resultSet) throws SQLException {
 
         Queue<TypedMessageBuilder<byte[]>> messageBuilderQueue = new LinkedList<>();
@@ -106,6 +73,18 @@ public abstract class PubtransTableHandler {
         return messageBuilderQueue;
     }
 
+    long getLastModifiedTimeStamp() {
+        return this.lastModifiedTimeStamp;
+    }
+
+    private void setLastModifiedTimeStamp(long ts) {
+        this.lastModifiedTimeStamp = ts;
+    }
+
+    abstract protected byte[] createPayload(ResultSet resultSet, PubtransTableProtos.Common common, PubtransTableProtos.DOITripInfo tripInfo) throws SQLException;
+
+    abstract protected TransitdataSchema getSchema();
+
     private PubtransTableProtos.Common parseCommon(ResultSet resultSet) throws SQLException {
         PubtransTableProtos.Common.Builder commonBuilder = PubtransTableProtos.Common.newBuilder();
 
@@ -140,13 +119,26 @@ public abstract class PubtransTableHandler {
         return commonBuilder.build();
     }
 
-    private Optional<String> getStopId(long jppId) {
-        return Optional.ofNullable(pubTransCache.getStopId(jppId));
+    private Optional<Long> toUtcEpochMs(String localTimestamp) {
+        return toUtcEpochMs(localTimestamp, timeZone);
     }
 
-    private Optional<Map<String, String>> getTripInfoFields(long dvjId) {
-        return Optional.of(pubTransCache.getTripInfoFields(dvjId));
+    private static Optional<Long> toUtcEpochMs(String localTimestamp, String zoneId) {
+        if (localTimestamp == null || localTimestamp.isEmpty())
+            return Optional.empty();
+
+        try {
+            LocalDateTime dt = LocalDateTime.parse(localTimestamp.replace(" ", "T")); // Make java.sql.Timestamp ISO compatible
+            ZoneId zone = ZoneId.of(zoneId);
+            long epochMs = dt.atZone(zone).toInstant().toEpochMilli();
+            return Optional.of(epochMs);
+        } catch (Exception e) {
+            log.error("Failed to parse datetime from " + localTimestamp, e);
+            return Optional.empty();
+        }
     }
+
+    abstract protected String getTimetabledDateTimeColumnName();
 
     private Optional<PubtransTableProtos.DOITripInfo> getTripInfo(long dvjId, long jppId) {
         try {
@@ -176,6 +168,14 @@ public abstract class PubtransTableHandler {
             log.warn("Failed to get Trip Info for dvj-id " + dvjId, e);
             return Optional.empty();
         }
+    }
+
+    private Optional<String> getStopId(long jppId) {
+        return Optional.ofNullable(pubTransCache.getStopId(jppId));
+    }
+
+    private Optional<Map<String, String>> getTripInfoFields(long dvjId) {
+        return Optional.of(pubTransCache.getTripInfoFields(dvjId));
     }
 
     private TypedMessageBuilder<byte[]> createMessage(String key, long eventTime, long dvjId, byte[] data, TransitdataSchema schema) {

@@ -16,11 +16,11 @@ public class RedisService {
 
     @PostConstruct
     public void init() {
-        log.info("Redis service starter");
+        log.info("Redis service started");
     }
 
-    public synchronized Map<Object, Object> hgetAll(String key) {
-        return redisTemplate.opsForHash().entries(key);
+    public synchronized <K, V> Map<K, V> hgetAll(String key) {
+        return (Map<K, V>) redisTemplate.opsForHash().entries(key);
     }
 
     public synchronized Object get(String key) {
